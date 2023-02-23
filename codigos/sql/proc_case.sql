@@ -90,7 +90,7 @@ GROUP BY 2,1
 ORDER BY 2 ASC
 );
 
-CREATE VIEW refined.view_sales_rank(
+CREATE VIEW refined.view_vendas_rank(
 select nmLinha,sum(Dezembro) Vendas 
 from `cobalt-list-378615.refined.tb_vendas_linha_ano_mes`
 where Ano = 2019
