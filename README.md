@@ -68,3 +68,12 @@ processos de carga, consulta e transformação dos dados;
 3. Utilizar uma ferramenta que lhe permita criar os processos de ETL ou DAG’s
 para ingestão e transformação de dados;
 4. Você deve implementar um controle de versionamento para seus códigos.
+
+### Desenvolvimento
+
+Para o desenvolvimento para resolução desse case foi usado as ferramendas do Google Cloud: Pub/Sub, Cloud Function, BigQuery e Composer.
+
+1. Cloud Composer fazendo a orquestração do processo iniciando mandando uma mensagem em um tópico no Pub/Sub e com isso iniciando a Cloud Function.
+2. Cloud Function pegando os arquivos no Google Sheets e inserindo no BigQuery
+3. E por fim, com Cloud Composer rodando uma procedure criando as tabelas consolidadas.
+
