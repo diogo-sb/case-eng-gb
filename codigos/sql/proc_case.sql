@@ -1,0 +1,101 @@
+CREATE OR REPLACE PROCEDURE procedure.proc_consolidado()
+BEGIN
+
+CREATE TABLE  trusted.tb_full_vendas AS(
+SELECT 
+     CAST(ID_MARCA	AS INT64)  AS IdMarca		
+    ,CAST(MARCA		AS STRING) AS nmMarca		
+    ,CAST(ID_LINHA	AS INT64)  AS IdLinha		
+    ,CAST(LINHA		AS STRING) AS nmLinha		
+    ,CAST(CONCAT(SUBSTR(DATA_VENDA,7,4), '-',SUBSTR(DATA_VENDA,4,2),'-',SUBSTR(DATA_VENDA,0,2)) AS DATE) DtVenda	
+    ,CAST(QTD_VENDA  AS INT64)  AS QtdVenda  
+FROM `cobalt-list-378615.raw.base_vendas`
+);
+
+CREATE TABLE  refined.tb_vendas_linha_ano_mes AS(
+SELECT DISTINCT
+MD5(nmMarca) as IdLineTime
+,nmLinha
+,EXTRACT(YEAR FROM DtVenda) Ano
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 1 THEN QtdVenda ELSE 0 END) Janeiro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 2 THEN QtdVenda ELSE 0 END) Fevereiro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 3 THEN QtdVenda ELSE 0 END) Marco
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 4 THEN QtdVenda ELSE 0 END) Abril
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 5 THEN QtdVenda ELSE 0 END) Maio
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 6 THEN QtdVenda ELSE 0 END) Junho
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 7 THEN QtdVenda ELSE 0 END) Julho
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 8 THEN QtdVenda ELSE 0 END) Agosto
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 9 THEN QtdVenda ELSE 0 END) Setembro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 10 THEN QtdVenda ELSE 0 END) Outubro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 11 THEN QtdVenda ELSE 0 END) Novembro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 12 THEN QtdVenda ELSE 0 END) Dezembro 
+FROM  `cobalt-list-378615.trusted.tb_full_vendas`
+GROUP BY 2,1,3
+ORDER BY 1,2 asc
+);
+
+CREATE TABLE  refined.tb_vendas_marca_linha AS(
+SELECT 
+MD5(nmMarca) as IdMakLine
+,nmMarca
+,SUM(CASE WHEN nmLinha = 'SOLAR' THEN QtdVenda END) SOLAR
+,SUM(CASE WHEN nmLinha = 'CABELOS' THEN QtdVenda END) CABELOS
+,SUM(CASE WHEN nmLinha = 'MAQUIAGEM' THEN QtdVenda END) MAQUIAGEM
+,SUM(CASE WHEN nmLinha = 'PERFUMARIA' THEN QtdVenda END) PERFUMARIA
+,SUM(CASE WHEN nmLinha = 'HIDRATANTES' THEN QtdVenda END) HIDRATANTES
+FROM  `cobalt-list-378615.trusted.tb_full_vendas`
+group by 2,1
+);
+
+CREATE TABLE  refined.tb_vendas_marca_ano_mes AS(
+SELECT distinct
+ MD5(nmMarca) as IdMarkTime
+,nmMarca
+,EXTRACT(YEAR FROM DtVenda) Ano
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 1 THEN QtdVenda ELSE 0 END) Janeiro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 2 THEN QtdVenda ELSE 0 END) Fevereiro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 3 THEN QtdVenda ELSE 0 END) Marco
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 4 THEN QtdVenda ELSE 0 END) Abril
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 5 THEN QtdVenda ELSE 0 END) Maio
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 6 THEN QtdVenda ELSE 0 END) Junho
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 7 THEN QtdVenda ELSE 0 END) Julho
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 8 THEN QtdVenda ELSE 0 END) Agosto
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 9 THEN QtdVenda ELSE 0 END) Setembro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 10 THEN QtdVenda ELSE 0 END) Outubro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 11 THEN QtdVenda ELSE 0 END) Novembro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 12 THEN QtdVenda ELSE 0 END) Dezembro 
+FROM  `cobalt-list-378615.trusted.tb_full_vendas`
+GROUP BY 3,2,1
+ORDER BY 1,2 asc
+);
+
+CREATE TABLE  refined.tb_vendas_ano_mes AS(
+SELECT   
+MD5(nmMarca) AS IdTime
+,EXTRACT(YEAR FROM DtVenda) Ano
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 1 THEN QtdVenda ELSE 0 END) Janeiro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 2 THEN QtdVenda ELSE 0 END) Fevereiro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 3 THEN QtdVenda ELSE 0 END) Marco
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 4 THEN QtdVenda ELSE 0 END) Abril
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 5 THEN QtdVenda ELSE 0 END) Maio
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 6 THEN QtdVenda ELSE 0 END) Junho
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 7 THEN QtdVenda ELSE 0 END) Julho
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 8 THEN QtdVenda ELSE 0 END) Agosto
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 9 THEN QtdVenda ELSE 0 END) Setembro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 10 THEN QtdVenda ELSE 0 END) Outubro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 11 THEN QtdVenda ELSE 0 END) Novembro
+,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 12 THEN QtdVenda ELSE 0 END) Dezembro
+FROM `cobalt-list-378615.trusted.tb_full_vendas`
+GROUP BY 2,1
+ORDER BY 2 ASC
+);
+
+CREATE VIEW refined.view_sales_rank(
+select nmLinha,sum(Dezembro) Vendas 
+from `cobalt-list-378615.refined.tb_vendas_linha_ano_mes`
+where Ano = 2019
+group by 1
+order by  2 desc
+);
+ 
+END;
