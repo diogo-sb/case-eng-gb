@@ -93,6 +93,10 @@ Usei para ser o banco de dados pois tem integração junto com as ferramentas do
 
 ### Composer
 Um serviço de orquestração de fluxos de trabalho totalmente gerenciado pelo Google e criado no Apache Airflow e integração total com os produtos do Google Cloud.
-Foi usada essa ferramenta para osquestrar todo o fluxo dentro da solução apresentada. Manda a mensagem para o topico no pub/sub, ativa a clound function por conta desse gatilho e em seguida executa a procedure para e carregar as tabelas consolidadas no BigQuery.
+Foi usada essa ferramenta para osquestrar todo o fluxo dentro da solução apresentada através de uma DAG. Manda a mensagem para o topico no pub/sub, ativa a clound function por conta desse gatilho e em seguida executa a procedure para e carregar as tabelas consolidadas no BigQuery.
 
 ### Códigos
+https://github.com/diogo-sb/case-eng-gb/tree/main/codigos - pasta que estão todos os códigos
+https://github.com/diogo-sb/case-eng-gb/tree/main/codigos/DAG - pasta da DAG
+https://github.com/diogo-sb/case-eng-gb/tree/main/codigos/function - pasta da clound function 
+https://github.com/diogo-sb/case-eng-gb/tree/main/codigos/sql - pasta SQL
