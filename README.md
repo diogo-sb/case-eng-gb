@@ -77,3 +77,22 @@ Para o desenvolvimento para resolução desse case foi usado as ferramendas do G
 2. Cloud Function pegando os arquivos no Google Sheets e inserindo no BigQuery
 3. E por fim, com Cloud Composer rodando uma procedure criando as tabelas consolidadas.
 
+Uma breve explicação de usar cada ferramenta:
+
+### Pub/sub
+Serviço de mensagens escalonável que separa os serviços que produzem mensagens dos serviços que processam essas mensagens. 
+Foi criado um tópico que receberá mensagens que servirão de gatilho criada no Cloud Function.
+
+### Cloud Function
+Serviço para executar seu código na nuvem sem servidores ou contêineres para fazer o gerenciamento, junta rapidez e custo barato para servir como trigger e executar funções junto com outras ferramentas. 
+Desenvolvido uma function em python que puxa os arquivos do google sheets atraves de um gatilho de uma mensagem e com isso carrega no bigquery.
+
+### BigQuery
+O BigQuery é um data warehouse corporativo econômico e completamente sem servidor. Ele tem machine learning e BI integrados que funcionam em várias nuvens e escalonamento de acordo com os dados.
+Usei para ser o banco de dados pois tem integração junto com as ferramentas do google, rapido em suas consultas e me possibilita fazer o armazenamento dos meus dados diretamente nele, evitando o custo adicional com a criação de um Data Lake.
+
+### Composer
+Um serviço de orquestração de fluxos de trabalho totalmente gerenciado pelo Google e criado no Apache Airflow e integração total com os produtos do Google Cloud.
+Foi usada essa ferramenta para osquestrar todo o fluxo dentro da solução apresentada. Manda a mensagem para o topico no pub/sub, ativa a clound function por conta desse gatilho e em seguida executa a procedure para e carregar as tabelas consolidadas no BigQuery.
+
+### Códigos
