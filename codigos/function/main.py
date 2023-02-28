@@ -5,7 +5,7 @@ import pandas_gbq
 from google.cloud import bigquery
 
 client = bigquery.Client()
-project_id = 'cobalt-list-378615'
+project_id = 'semiotic-joy-379201'
 table_destination = 'raw.base_vendas'
 
 def sheets_sales(event,context):
@@ -35,4 +35,3 @@ def sheets_sales(event,context):
    
     load_bq = pd.DataFrame(df)
     pandas_gbq.to_gbq(load_bq, table_destination, project_id = project_id, if_exists = 'append')
-    
