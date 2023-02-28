@@ -6,7 +6,7 @@ from airflow.models import Variable
 from datetime import timedelta, datetime
 
 
-PROJECT_ID = "cobalt-list-378615"
+PROJECT_ID = "semiotic-joy-379201"
 TOPIC_ID = "trigger_function"
 MESSAGE = {'data':b'go'}
 PROC_NAME = "proc_consolidado"
