@@ -9,7 +9,7 @@ SELECT
     ,CAST(LINHA		AS STRING) AS nmLinha		
     ,CAST(CONCAT(SUBSTR(DATA_VENDA,7,4), '-',SUBSTR(DATA_VENDA,4,2),'-',SUBSTR(DATA_VENDA,0,2)) AS DATE) DtVenda	
     ,CAST(QTD_VENDA  AS INT64)  AS QtdVenda  
-FROM `cobalt-list-378615.raw.base_vendas`
+FROM `semiotic-joy-379201.raw.base_vendas`
 );
 
 CREATE TABLE  refined.tb_vendas_linha_ano_mes AS(
@@ -29,7 +29,7 @@ MD5(nmMarca) as IdLineTime
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 10 THEN QtdVenda ELSE 0 END) Outubro
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 11 THEN QtdVenda ELSE 0 END) Novembro
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 12 THEN QtdVenda ELSE 0 END) Dezembro 
-FROM  `cobalt-list-378615.trusted.tb_full_vendas`
+FROM  `semiotic-joy-379201.trusted.tb_full_vendas`
 GROUP BY 2,1,3
 ORDER BY 1,2 asc
 );
@@ -43,7 +43,7 @@ MD5(nmMarca) as IdMakLine
 ,SUM(CASE WHEN nmLinha = 'MAQUIAGEM' THEN QtdVenda END) MAQUIAGEM
 ,SUM(CASE WHEN nmLinha = 'PERFUMARIA' THEN QtdVenda END) PERFUMARIA
 ,SUM(CASE WHEN nmLinha = 'HIDRATANTES' THEN QtdVenda END) HIDRATANTES
-FROM  `cobalt-list-378615.trusted.tb_full_vendas`
+FROM  `semiotic-joy-379201.trusted.tb_full_vendas`
 group by 2,1
 );
 
@@ -64,7 +64,7 @@ SELECT distinct
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 10 THEN QtdVenda ELSE 0 END) Outubro
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 11 THEN QtdVenda ELSE 0 END) Novembro
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 12 THEN QtdVenda ELSE 0 END) Dezembro 
-FROM  `cobalt-list-378615.trusted.tb_full_vendas`
+FROM  `semiotic-joy-379201.trusted.tb_full_vendas`
 GROUP BY 3,2,1
 ORDER BY 1,2 asc
 );
@@ -85,14 +85,14 @@ MD5(nmMarca) AS IdTime
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 10 THEN QtdVenda ELSE 0 END) Outubro
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 11 THEN QtdVenda ELSE 0 END) Novembro
 ,SUM(CASE WHEN EXTRACT(MONTH FROM DtVenda) = 12 THEN QtdVenda ELSE 0 END) Dezembro
-FROM `cobalt-list-378615.trusted.tb_full_vendas`
+FROM `semiotic-joy-379201.trusted.tb_full_vendas`
 GROUP BY 2,1
 ORDER BY 2 ASC
 );
 
-CREATE VIEW refined.view_vendas_rank(
+CREATE VIEW refined.view_vendas_rank AS(
 select nmLinha,sum(Dezembro) Vendas 
-from `cobalt-list-378615.refined.tb_vendas_linha_ano_mes`
+from `semiotic-joy-379201.refined.tb_vendas_linha_ano_mes`
 where Ano = 2019
 group by 1
 order by  2 desc
